@@ -1,0 +1,11 @@
+# Dependencias de librerías usadas por módulos OCA
+xlrd
+xlsxwriter
+xlwt
+PyPDF2
+qrcode
+python-barcode
+pandas
+openpyxl
+numpy
+unicodecsv
