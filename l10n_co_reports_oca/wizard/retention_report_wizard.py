@@ -31,6 +31,9 @@ class RetentionReportWizardAbstract(models.AbstractModel):
     )
     partner_ids = fields.Many2many(
         comodel_name="res.partner",
+        relation="l10n_co_ret_wiz_partner_rel",
+        column1="wizard_id",
+        column2="partner_id",
         string="Filter Partners",
         default=lambda self: self._default_partners(),
     )
