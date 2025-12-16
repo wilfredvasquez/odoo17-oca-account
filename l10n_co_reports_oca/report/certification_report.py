@@ -1,4 +1,6 @@
-from odoo import api, models
+from datetime import date
+
+from odoo import api, fields, models
 
 
 class CertificationReportAbstract(models.AbstractModel):
@@ -120,6 +122,9 @@ class CertificationReportAbstract(models.AbstractModel):
         # Get fiscal year from declaration date or date_to
         current_date = data.get("declaration_date") or data.get("date_to")
         if current_date:
+            # Convert to date object if it's a string
+            if isinstance(current_date, str):
+                current_date = fields.Date.from_string(current_date)
             fiscal_year_dates = wizard.company_id.compute_fiscalyear_dates(current_date)
             current_year = fiscal_year_dates["date_from"].year
         else:
