@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Base Layout for Certification Reports -->
+    <template id="certification_report_base">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Header -->
+                        <h2 class="text-center" style="padding-top: 15px;">
+                            <t t-out="report_title" />
+                        </h2>
+
+                        <!-- Partner Information -->
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>NIT:</strong>
+                                <span t-field="doc['partner'].vat" />
+                            </div>
+                            <div class="col-6">
+                                <strong>Fecha de Expedición:</strong>
+                                <span
+                                    t-out="expedition_date"
+                                    t-options="{'widget': 'date'}"
+                                />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Nombre/Razón Social:</strong>
+                                <span t-field="doc['partner'].display_name" />
+                            </div>
+                            <div class="col-6">
+                                <strong>Fecha de Declaración:</strong>
+                                <span
+                                    t-out="declaration_date"
+                                    t-options="{'widget': 'date'}"
+                                />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <strong>Ciudad Tercero:</strong>
+                                <span t-field="doc['partner'].city" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <strong>Dirección:</strong>
+                                <span t-field="doc['partner'].street" />
+                            </div>
+                        </div>
+
+                        <!-- Introduction Text -->
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <p>
+                                    Durante el año gravable de <strong
+                                        t-out="current_year"
+                                    />,
+                                    practicó en la ciudad de <strong
+                                        t-field="company.city"
+                                    />
+                                    <t t-out="retention_type_text" /> a
+                                    <strong t-field="doc['partner'].display_name" />
+                                    con NIT: <strong t-field="doc['partner'].vat" />.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Data Table - To be replaced by specific templates -->
+                        <t t-out="0" />
+
+                        <!-- Footer Texts -->
+                        <div class="row mt-4" t-if="show_fuente_note">
+                            <div class="col-12">
+                                <p>
+                                    Señor contribuyente: Favor tener en cuenta que la base certificada
+                                    por nosotros corresponde a la sometida a retención durante el periodo
+                                    gravable según las normas vigentes sobre la materia y podría ser
+                                    diferente a lo facturado por usted durante el mismo periodo. Al
+                                    declarar tenerlo presente.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p>
+                                    El presente certificado se expide en concordancia con las
+                                    disposiciones legales contenidas en el artículo 381 del Estatuto
+                                    Tributario.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p>
+                                    Dicha Retención fue consignada oportunamente a nombre de la
+                                    Dirección de Impuestos y Aduanas Nacionales en la Ciudad de
+                                    <strong t-field="company.city" />.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p>
+                                    <strong>NO REQUIERE FIRMA AUTÓGRAFA.</strong>
+                                    <span t-out="article" />
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ICA Certification Report Template -->
+    <template id="report_certification_ica_document">
+        <t
+            t-call="l10n_co_reports_oca.certification_report_base"
+            t-lang="lang"
+        >
+            <t t-set="report_title">CERTIFICADO DE RETENCIÓN EN ICA</t>
+            <t t-set="retention_type_text"> retención de ICA</t>
+            <t t-set="show_fuente_note" t-value="False" />
+
+            <!-- ICA/Fuente Table -->
+            <div class="row mt-3">
+                <table class="table table-sm table-bordered">
+                    <colgroup>
+                        <col span="1" style="width: 50%;" />
+                        <col span="1" style="width: 25%;" />
+                        <col span="1" style="width: 25%;" />
+                    </colgroup>
+                    <thead>
+                        <tr class="bg-light">
+                            <th><strong>Bimestre</strong></th>
+                            <th class="text-end">
+                                <strong>Monto del pago sujeto a retención</strong>
+                            </th>
+                            <th class="text-end"><strong>Retenido y consignado</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc['lines']" t-as="line">
+                            <td t-out="line['name']" />
+                            <td
+                                class="text-end"
+                                t-out="line['tax_base_amount']"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                            <td
+                                class="text-end"
+                                t-out="line['balance']"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-light fw-bold">
+                            <td><strong>TOTAL</strong></td>
+                            <td
+                                class="text-end"
+                                t-out="doc['totals'].get('tax_base_amount', 0)"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                            <td
+                                class="text-end"
+                                t-out="doc['totals'].get('balance', 0)"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Totals Box -->
+            <div class="row mt-3">
+                <div class="offset-5 col-7">
+                    <div class="border border-dark p-2">
+                        <div class="text-center mb-2">
+                            <strong>TOTAL DE IMPUESTOS DESCONTABLES</strong>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>MONTO DEL PAGO SUJETO A:</strong>
+                                <br />
+                                <span
+                                    t-out="doc['totals'].get('tax_base_amount', 0)"
+                                    t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                                />
+                            </div>
+                            <div class="col-6">
+                                <strong>RETENIDO Y CONSIGNADO:</strong>
+                                <br />
+                                <span
+                                    t-out="doc['totals'].get('balance', 0)"
+                                    t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_certification_ica">
+        <t t-call="web.html_container">
+            <t t-set="lang" t-value="'es_CO'" />
+            <t t-foreach="docs" t-as="doc">
+                <t
+                    t-call="l10n_co_reports_oca.report_certification_ica_document"
+                />
+            </t>
+        </t>
+    </template>
+
+    <!-- IVA Certification Report Template -->
+    <template id="report_certification_iva_document">
+        <t
+            t-call="l10n_co_reports_oca.certification_report_base"
+            t-lang="lang"
+        >
+            <t t-set="report_title">CERTIFICADO DE RETENCIÓN DE IVA</t>
+            <t t-set="retention_type_text"> retención de IVA</t>
+            <t t-set="show_fuente_note" t-value="False" />
+
+            <!-- IVA Table -->
+            <div class="row mt-3">
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr class="bg-light">
+                            <th><strong>Bimestre</strong></th>
+                            <th class="text-end"><strong>Monto Total Operación</strong></th>
+                            <th class="text-end">
+                                <strong>Monto del Pago Sujeto Retención</strong>
+                            </th>
+                            <th class="text-end"><strong>Retenido Consignado</strong></th>
+                            <th class="text-end"><strong>%</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc['lines']" t-as="line">
+                            <td t-out="line['name']" />
+                            <td
+                                class="text-end"
+                                t-out="line['tax_base_amount']"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                            <td
+                                class="text-end"
+                                t-out="line['balance_15_over_19']"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                            <td
+                                class="text-end"
+                                t-out="line['balance']"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                            <td
+                                class="text-end"
+                                t-out="line.get('percentage', 0.15)"
+                                t-options="{'widget': 'float', 'precision': 2}"
+                            />
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-light fw-bold">
+                            <td><strong>TOTAL</strong></td>
+                            <td
+                                class="text-end"
+                                t-out="doc['totals'].get('tax_base_amount', 0)"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                            <td
+                                class="text-end"
+                                t-out="doc['totals'].get('balance_15_over_19', 0)"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                            <td
+                                class="text-end"
+                                t-out="doc['totals'].get('balance', 0)"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                            <td class="text-end">-</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Totals Box for IVA -->
+            <div class="row mt-3">
+                <div class="offset-1 col-11">
+                    <div class="border border-dark p-2">
+                        <div class="text-center mb-2">
+                            <strong>TOTAL DE IMPUESTOS DESCONTABLES</strong>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <strong>MONTO TOTAL OPERACIONAL:</strong>
+                                <br />
+                                <span
+                                    t-out="doc['totals'].get('tax_base_amount', 0)"
+                                    t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                                />
+                            </div>
+                            <div class="col-4">
+                                <strong>MONTO DEL PAGO SUJETO A:</strong>
+                                <br />
+                                <span
+                                    t-out="doc['totals'].get('balance_15_over_19', 0)"
+                                    t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                                />
+                            </div>
+                            <div class="col-4">
+                                <strong>RETENIDO Y CONSIGNADO:</strong>
+                                <br />
+                                <span
+                                    t-out="doc['totals'].get('balance', 0)"
+                                    t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_certification_iva">
+        <t t-call="web.html_container">
+            <t t-set="lang" t-value="'es_CO'" />
+            <t t-foreach="docs" t-as="doc">
+                <t
+                    t-call="l10n_co_reports_oca.report_certification_iva_document"
+                />
+            </t>
+        </t>
+    </template>
+
+    <!-- Fuente Certification Report Template -->
+    <template id="report_certification_fuente_document">
+        <t
+            t-call="l10n_co_reports_oca.certification_report_base"
+            t-lang="lang"
+        >
+            <t t-set="report_title">CERTIFICADO DE RETENCIÓN POR TERCEROS</t>
+            <t t-set="retention_type_text"> retención en la fuente</t>
+            <t t-set="show_fuente_note" t-value="True" />
+
+            <!-- Fuente Table -->
+            <div class="row mt-3">
+                <table class="table table-sm table-bordered">
+                    <colgroup>
+                        <col span="1" style="width: 50%;" />
+                        <col span="1" style="width: 25%;" />
+                        <col span="1" style="width: 25%;" />
+                    </colgroup>
+                    <thead>
+                        <tr class="bg-light">
+                            <th><strong>Concepto de retención</strong></th>
+                            <th class="text-end">
+                                <strong>Monto del pago sujeto a retención</strong>
+                            </th>
+                            <th class="text-end"><strong>Retenido y consignado</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc['lines']" t-as="line">
+                            <td t-out="line['name']" />
+                            <td
+                                class="text-end"
+                                t-out="line['tax_base_amount']"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                            <td
+                                class="text-end"
+                                t-out="line['balance']"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-light fw-bold">
+                            <td><strong>TOTAL</strong></td>
+                            <td
+                                class="text-end"
+                                t-out="doc['totals'].get('tax_base_amount', 0)"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                            <td
+                                class="text-end"
+                                t-out="doc['totals'].get('balance', 0)"
+                                t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                            />
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Totals Box -->
+            <div class="row mt-3">
+                <div class="offset-5 col-7">
+                    <div class="border border-dark p-2">
+                        <div class="text-center mb-2">
+                            <strong>TOTAL DE IMPUESTOS DESCONTABLES</strong>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>MONTO DEL PAGO SUJETO A:</strong>
+                                <br />
+                                <span
+                                    t-out="doc['totals'].get('tax_base_amount', 0)"
+                                    t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                                />
+                            </div>
+                            <div class="col-6">
+                                <strong>RETENIDO Y CONSIGNADO:</strong>
+                                <br />
+                                <span
+                                    t-out="doc['totals'].get('balance', 0)"
+                                    t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_certification_fuente">
+        <t t-call="web.html_container">
+            <t t-set="lang" t-value="'es_CO'" />
+            <t t-foreach="docs" t-as="doc">
+                <t
+                    t-call="l10n_co_reports_oca.report_certification_fuente_document"
+                />
+            </t>
+        </t>
+    </template>
+
+    <!-- Report Actions -->
+    <record id="action_report_certification_ica_html" model="ir.actions.report">
+        <field name="name">Certificado de Retención en ICA</field>
+        <field name="model">l10n_co_reports_oca.retention_report.wizard.ica</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">l10n_co_reports_oca.report_certification_ica</field>
+        <field name="report_file">l10n_co_reports_oca.report_certification_ica</field>
+    </record>
+
+    <record id="action_report_certification_ica_pdf" model="ir.actions.report">
+        <field name="name">Certificado de Retención en ICA (PDF)</field>
+        <field name="model">l10n_co_reports_oca.retention_report.wizard.ica</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_co_reports_oca.report_certification_ica</field>
+        <field name="report_file">l10n_co_reports_oca.report_certification_ica</field>
+    </record>
+
+    <record id="action_report_certification_iva_html" model="ir.actions.report">
+        <field name="name">Certificado de Retención en IVA</field>
+        <field name="model">l10n_co_reports_oca.retention_report.wizard.iva</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">l10n_co_reports_oca.report_certification_iva</field>
+        <field name="report_file">l10n_co_reports_oca.report_certification_iva</field>
+    </record>
+
+    <record id="action_report_certification_iva_pdf" model="ir.actions.report">
+        <field name="name">Certificado de Retención en IVA (PDF)</field>
+        <field name="model">l10n_co_reports_oca.retention_report.wizard.iva</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_co_reports_oca.report_certification_iva</field>
+        <field name="report_file">l10n_co_reports_oca.report_certification_iva</field>
+    </record>
+
+    <record id="action_report_certification_fuente_html" model="ir.actions.report">
+        <field name="name">Certificado de Retención en la Fuente</field>
+        <field name="model">l10n_co_reports_oca.retention_report.wizard.fuente</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">l10n_co_reports_oca.report_certification_fuente</field>
+        <field name="report_file">l10n_co_reports_oca.report_certification_fuente</field>
+    </record>
+
+    <record id="action_report_certification_fuente_pdf" model="ir.actions.report">
+        <field name="name">Certificado de Retención en la Fuente (PDF)</field>
+        <field name="model">l10n_co_reports_oca.retention_report.wizard.fuente</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_co_reports_oca.report_certification_fuente</field>
+        <field name="report_file">l10n_co_reports_oca.report_certification_fuente</field>
+    </record>
+
+    <!-- XLSX Report Actions -->
+    <record id="action_report_certification_ica_xlsx" model="ir.actions.report">
+        <field name="name">Certificado de Retención en ICA (XLSX)</field>
+        <field name="model">l10n_co_reports_oca.retention_report.wizard.ica</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">l10n_co_reports_oca.report_certification_ica_xlsx</field>
+        <field name="report_file">l10n_co_reports_oca.report_certification_ica_xlsx</field>
+    </record>
+
+    <record id="action_report_certification_iva_xlsx" model="ir.actions.report">
+        <field name="name">Certificado de Retención en IVA (XLSX)</field>
+        <field name="model">l10n_co_reports_oca.retention_report.wizard.iva</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">l10n_co_reports_oca.report_certification_iva_xlsx</field>
+        <field name="report_file">l10n_co_reports_oca.report_certification_iva_xlsx</field>
+    </record>
+
+    <record id="action_report_certification_fuente_xlsx" model="ir.actions.report">
+        <field name="name">Certificado de Retención en la Fuente (XLSX)</field>
+        <field name="model">l10n_co_reports_oca.retention_report.wizard.fuente</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">l10n_co_reports_oca.report_certification_fuente_xlsx</field>
+        <field name="report_file">l10n_co_reports_oca.report_certification_fuente_xlsx</field>
+    </record>
+
+</odoo>

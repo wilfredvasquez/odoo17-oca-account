@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- ICA Retention Report Wizard View -->
+    <record id="retention_report_wizard_ica_form" model="ir.ui.view">
+        <field name="name">l10n_co_reports_oca.retention_report.wizard.ica.form</field>
+        <field name="model">l10n_co_reports_oca.retention_report.wizard.ica</field>
+        <field name="arch" type="xml">
+            <form string="Certificado de Retención en ICA">
+                <group>
+                    <group string="Filters">
+                        <field
+                            name="company_id"
+                            groups="base.group_multi_company"
+                            options="{'no_create': True}"
+                        />
+                        <field
+                            name="date_range_id"
+                            options="{'no_create': True}"
+                        />
+                        <field name="date_from" />
+                        <field name="date_to" />
+                        <field name="target_move" />
+                    </group>
+                    <group string="Certificate Data">
+                        <field name="expedition_date" />
+                        <field name="declaration_date" />
+                        <field name="article" />
+                    </group>
+                </group>
+                <group string="Partners">
+                    <field
+                        name="partner_ids"
+                        nolabel="1"
+                        widget="many2many_tags"
+                        options="{'no_create': True}"
+                    />
+                </group>
+                <footer>
+                    <button
+                        name="button_export_html"
+                        string="View"
+                        type="object"
+                        default_focus="1"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="button_export_pdf"
+                        string="Export PDF"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="button_export_xlsx"
+                        string="Export XLSX"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_retention_report_wizard_ica" model="ir.actions.act_window">
+        <field name="name">Certificado de Retención en ICA</field>
+        <field name="res_model">l10n_co_reports_oca.retention_report.wizard.ica</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- IVA Retention Report Wizard View -->
+    <record id="retention_report_wizard_iva_form" model="ir.ui.view">
+        <field name="name">l10n_co_reports_oca.retention_report.wizard.iva.form</field>
+        <field name="model">l10n_co_reports_oca.retention_report.wizard.iva</field>
+        <field name="arch" type="xml">
+            <form string="Certificado de Retención en IVA">
+                <group>
+                    <group string="Filters">
+                        <field
+                            name="company_id"
+                            groups="base.group_multi_company"
+                            options="{'no_create': True}"
+                        />
+                        <field
+                            name="date_range_id"
+                            options="{'no_create': True}"
+                        />
+                        <field name="date_from" />
+                        <field name="date_to" />
+                        <field name="target_move" />
+                    </group>
+                    <group string="Certificate Data">
+                        <field name="expedition_date" />
+                        <field name="declaration_date" />
+                        <field name="article" />
+                    </group>
+                </group>
+                <group string="Partners">
+                    <field
+                        name="partner_ids"
+                        nolabel="1"
+                        widget="many2many_tags"
+                        options="{'no_create': True}"
+                    />
+                </group>
+                <footer>
+                    <button
+                        name="button_export_html"
+                        string="View"
+                        type="object"
+                        default_focus="1"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="button_export_pdf"
+                        string="Export PDF"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="button_export_xlsx"
+                        string="Export XLSX"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_retention_report_wizard_iva" model="ir.actions.act_window">
+        <field name="name">Certificado de Retención en IVA</field>
+        <field name="res_model">l10n_co_reports_oca.retention_report.wizard.iva</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Fuente Retention Report Wizard View -->
+    <record id="retention_report_wizard_fuente_form" model="ir.ui.view">
+        <field name="name">l10n_co_reports_oca.retention_report.wizard.fuente.form</field>
+        <field name="model">l10n_co_reports_oca.retention_report.wizard.fuente</field>
+        <field name="arch" type="xml">
+            <form string="Certificado de Retención en la Fuente">
+                <group>
+                    <group string="Filters">
+                        <field
+                            name="company_id"
+                            groups="base.group_multi_company"
+                            options="{'no_create': True}"
+                        />
+                        <field
+                            name="date_range_id"
+                            options="{'no_create': True}"
+                        />
+                        <field name="date_from" />
+                        <field name="date_to" />
+                        <field name="target_move" />
+                    </group>
+                    <group string="Certificate Data">
+                        <field name="expedition_date" />
+                        <field name="declaration_date" />
+                        <field name="article" />
+                    </group>
+                </group>
+                <group string="Partners">
+                    <field
+                        name="partner_ids"
+                        nolabel="1"
+                        widget="many2many_tags"
+                        options="{'no_create': True}"
+                    />
+                </group>
+                <footer>
+                    <button
+                        name="button_export_html"
+                        string="View"
+                        type="object"
+                        default_focus="1"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="button_export_pdf"
+                        string="Export PDF"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="button_export_xlsx"
+                        string="Export XLSX"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_retention_report_wizard_fuente" model="ir.actions.act_window">
+        <field name="name">Certificado de Retención en la Fuente</field>
+        <field name="res_model">l10n_co_reports_oca.retention_report.wizard.fuente</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

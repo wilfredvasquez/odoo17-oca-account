@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Parent Menu for Colombian Reports -->
+    <menuitem
+        id="menu_colombian_reports"
+        name="Colombian Reports"
+        parent="account.menu_finance_reports"
+        sequence="50"
+        groups="account.group_account_readonly"
+    />
+
+    <!-- Submenu for Retention Certificates -->
+    <menuitem
+        id="menu_retention_certificates"
+        name="Retention Certificates"
+        parent="menu_colombian_reports"
+        sequence="10"
+    />
+
+    <!-- ICA Report Menu -->
+    <menuitem
+        id="menu_retention_report_ica"
+        name="Certificado de Retención en ICA"
+        parent="menu_retention_certificates"
+        action="action_retention_report_wizard_ica"
+        sequence="10"
+    />
+
+    <!-- IVA Report Menu -->
+    <menuitem
+        id="menu_retention_report_iva"
+        name="Certificado de Retención en IVA"
+        parent="menu_retention_certificates"
+        action="action_retention_report_wizard_iva"
+        sequence="20"
+    />
+
+    <!-- Fuente Report Menu -->
+    <menuitem
+        id="menu_retention_report_fuente"
+        name="Certificado de Retención en la Fuente"
+        parent="menu_retention_certificates"
+        action="action_retention_report_wizard_fuente"
+        sequence="30"
+    />
+
+</odoo>
