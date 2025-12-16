@@ -6,6 +6,7 @@
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
                 <t t-call="web.external_layout">
+                    <t t-set="o" t-value="wizard" />
                     <div class="page">
                         <!-- Header -->
                         <h2 class="text-center" style="padding-top: 15px;">
