@@ -29,14 +29,6 @@ class RetentionReportWizardAbstract(models.AbstractModel):
         required=True,
         default="posted",
     )
-    partner_ids = fields.Many2many(
-        comodel_name="res.partner",
-        relation="l10n_co_ret_wiz_partner_rel",
-        column1="wizard_id",
-        column2="partner_id",
-        string="Filter Partners",
-        default=lambda self: self._default_partners(),
-    )
     expedition_date = fields.Date(
         string="Expedition Date",
         default=fields.Date.context_today,
@@ -108,6 +100,15 @@ class RetentionReportWizardIca(models.TransientModel):
     _description = "Colombian ICA Retention Report Wizard"
     _inherit = "l10n_co_reports_oca.retention_report.wizard.abstract"
 
+    partner_ids = fields.Many2many(
+        comodel_name="res.partner",
+        relation="l10n_co_ret_wiz_ica_partner_rel",
+        column1="wizard_id",
+        column2="partner_id",
+        string="Filter Partners",
+        default=lambda self: self._default_partners(),
+    )
+
     def _get_report_name(self, report_type="qweb-html"):
         if report_type == "xlsx":
             return "l10n_co_reports_oca.report_certification_ica_xlsx"
@@ -121,6 +122,15 @@ class RetentionReportWizardIva(models.TransientModel):
     _description = "Colombian IVA Retention Report Wizard"
     _inherit = "l10n_co_reports_oca.retention_report.wizard.abstract"
 
+    partner_ids = fields.Many2many(
+        comodel_name="res.partner",
+        relation="l10n_co_ret_wiz_iva_partner_rel",
+        column1="wizard_id",
+        column2="partner_id",
+        string="Filter Partners",
+        default=lambda self: self._default_partners(),
+    )
+
     def _get_report_name(self, report_type="qweb-html"):
         if report_type == "xlsx":
             return "l10n_co_reports_oca.report_certification_iva_xlsx"
@@ -133,6 +143,15 @@ class RetentionReportWizardFuente(models.TransientModel):
     _name = "l10n_co_reports_oca.retention_report.wizard.fuente"
     _description = "Colombian Fuente Retention Report Wizard"
     _inherit = "l10n_co_reports_oca.retention_report.wizard.abstract"
+
+    partner_ids = fields.Many2many(
+        comodel_name="res.partner",
+        relation="l10n_co_ret_wiz_fuente_partner_rel",
+        column1="wizard_id",
+        column2="partner_id",
+        string="Filter Partners",
+        default=lambda self: self._default_partners(),
+    )
 
     def _get_report_name(self, report_type="qweb-html"):
         if report_type == "xlsx":
