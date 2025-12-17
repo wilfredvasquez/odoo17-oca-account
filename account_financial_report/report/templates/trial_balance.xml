@@ -216,18 +216,16 @@
         <!-- Display table headers for lines -->
         <div class="act_as_thead">
             <div class="act_as_row labels">
-                <!--
                 <t t-if="not show_partner_details">
+                    <!--## Code-->
                     <div class="act_as_cell" style="width: 8%;">Code</div>
+                    <!--## Account-->
                     <div class="act_as_cell" style="width: 25%;">Account</div>
                 </t>
                 <t t-if="show_partner_details">
+                    <!--## Partner-->
                     <div class="act_as_cell" style="width: 33%;">Partner</div>
                 </t>
-                -->
-                <div class="act_as_cell" style="width: 8%;">Code</div>
-                <div class="act_as_cell" style="width: 15%;">Account</div>
-                <div class="act_as_cell" style="width: 10%;">Partner</div>
                 <!--## Initial balance-->
                 <div class="act_as_cell" style="width: 9%;">
                     Initial
@@ -323,16 +321,6 @@
                 </div>
             </t>
             <!--## Initial balance-->
-            <div class="act_as_cell left" t-att-style="style">
-                    <t t-set="res_model" t-value="'res.partner'" />
-                    <span
-                        t-att-res-id="partner_id"
-                        res-model="res.partner"
-                        view-type="form"
-                    >
-                        <t t-out="partners_data[partner_id]['name']" />
-                    </span>
-                </div>
             <div class="act_as_cell amount" t-att-style="style">
                 <t t-if="not show_partner_details">
                     <t t-if="balance['type'] == 'account_type'">
